@@ -23,6 +23,14 @@ public class HeaderFrame implements Frame {
         this.headers = header;
     }
 
+    public static HeaderFrame empty() {
+        return new HeaderFrame(new HashMap<>());
+    }
+
+    public void addHeaderEntry(String headerName, Object headerValue) {
+        headers.put(headerName, headerValue);
+    }
+
     public boolean hasHeader(String headerName) {
         return headers.containsKey(headerName);
     }

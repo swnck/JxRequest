@@ -1,5 +1,6 @@
 package de.swnck;
 
+import de.swnck.config.ProxyConfiguration;
 import de.swnck.config.RequestConfiguration;
 import de.swnck.consumer.ResponseConsumer;
 import de.swnck.frame.type.BodyFrame;
@@ -9,6 +10,8 @@ import de.swnck.util.ContentType;
 import de.swnck.util.StatusCode;
 import lombok.Getter;
 
+import java.net.InetSocketAddress;
+import java.net.ProxySelector;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -17,10 +20,20 @@ import java.util.concurrent.CompletableFuture;
 
 @Getter
 public class JxRequest {
-    private final RequestConfiguration configuration;
+    private RequestConfiguration requestConfiguration = null;
+    private ProxyConfiguration proxyConfiguration = null;
 
-    public JxRequest(RequestConfiguration configuration) {
-        this.configuration = configuration;
+    public JxRequest(RequestConfiguration requestConfiguration, ProxyConfiguration proxyConfiguration) {
+        this.requestConfiguration = requestConfiguration;
+        this.proxyConfiguration = proxyConfiguration;
+    }
+
+    public JxRequest(RequestConfiguration requestConfiguration) {
+        this.requestConfiguration = requestConfiguration;
+    }
+
+    public JxRequest(ProxyConfiguration proxyConfiguration) {
+        this.proxyConfiguration = proxyConfiguration;
     }
 
     public void get(HeaderFrame headers, ResponseConsumer responseConsumer, String url) {
@@ -33,8 +46,17 @@ public class JxRequest {
 
     private void performRequest(String method, HeaderFrame headers, BodyFrame bodyFrame, ResponseConsumer responseConsumer, String url) {
         try {
-            HttpClient client = HttpClient.newHttpClient();
+            HttpClient client;
+            client = HttpClient.newHttpClient();
+            if (proxyConfiguration != null) {
+                //System.out.println("Proxy: " + proxyConfiguration.getHost() + ":" + proxyConfiguration.getPort());
+                 client = HttpClient.newBuilder().
+                        proxy(ProxySelector.of(new InetSocketAddress(proxyConfiguration.getHost(), proxyConfiguration.getPort())))
+                        .build();
+            }
+
             HttpRequest.Builder requestBuilder = HttpRequest.newBuilder()
+
                     .uri(new URI(url))
                     .method(method, HttpRequest.BodyPublishers.ofString(bodyFrame.getBodyAsJson()));
 

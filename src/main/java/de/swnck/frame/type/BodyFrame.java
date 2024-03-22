@@ -17,11 +17,19 @@ public class BodyFrame implements Frame {
     private Map<String, Object> body;
 
     public BodyFrame() {
-        this.body = new HashMap<>();
+        body = new HashMap<>();
     }
 
     public BodyFrame(Map<String, Object> body) {
         this.body = body;
+    }
+
+    public static BodyFrame empty() {
+        return new BodyFrame(new HashMap<>());
+    }
+
+    public void addBodyEntry(String bodyName, Object bodyValue) {
+        body.put(bodyName, bodyValue);
     }
 
     public String getBodyAsJson() {
