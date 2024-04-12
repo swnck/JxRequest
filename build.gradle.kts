@@ -3,8 +3,8 @@ plugins {
     id("maven-publish")
 }
 
-group = "de.swnck.JxRequest"
-version = "1.0.0-SNAPSHOT"
+group = "de.swnck"
+version = "1.0.1"
 
 repositories {
     mavenCentral()
@@ -39,9 +39,9 @@ publishing {
             name = "nexus"
             val isSnapshot = project.version.toString().endsWith("-SNAPSHOT")
             url = if (isSnapshot)
-                uri("https://nexus.synclyn.com/repository/maven-snapshots/")
+                uri("https://nexus.xo-6.studio/repository/maven-snapshots/")
             else
-                uri("https://nexus.synclyn.com/repository/maven-releases/")
+                uri("https://nexus.xo-6.studio/repository/maven-releases/")
             credentials {
                 username = System.getenv("NEXUS_USERNAME")
                 password = System.getenv("NEXUS_PASSWORD")

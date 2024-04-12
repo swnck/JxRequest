@@ -1,2 +1,2 @@
-rootProject.name = "JxRequest"
+rootProject.name = "jxrequest"
 
