@@ -1,25 +1,22 @@
 package de.swnck;
 
-import de.swnck.config.ProxyConfiguration;
 import de.swnck.config.RequestConfiguration;
 import de.swnck.frame.type.BodyFrame;
 import de.swnck.frame.type.HeaderFrame;
 import de.swnck.frame.type.ResponseFrame;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 public class JxRequestTest {
     @Test
     void getRequest() {
         JxRequest jxRequest = new JxRequest(
-                RequestConfiguration.builder().build(),
-                ProxyConfiguration.builder().
-                        host("85.214.250.48")
-                        .port(3128)
-                        .build()
+                RequestConfiguration.builder().build()
         );
 
         jxRequest.get(HeaderFrame.empty(), (ResponseFrame responseFrame) -> {
-            //assertNotNull(responseFrame.getContent()); Todo: impl. Http-Proxy
+            assertNotNull(responseFrame.getContent());
         }, "https://google.com");
     }
 

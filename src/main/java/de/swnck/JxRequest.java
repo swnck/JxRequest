@@ -17,6 +17,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.atomic.AtomicReference;
 
 @Getter
 public class JxRequest {
@@ -36,23 +37,24 @@ public class JxRequest {
         this.proxyConfiguration = proxyConfiguration;
     }
 
-    public void get(HeaderFrame headers, ResponseConsumer responseConsumer, String url) {
-        performRequest("GET", headers, new BodyFrame(), responseConsumer, url);
+
+    public ResponseFrame get(HeaderFrame headers, ResponseConsumer responseConsumer, String url) {
+        return performRequest("GET", headers, new BodyFrame(), responseConsumer, url);
     }
 
-    public void post(HeaderFrame headers, BodyFrame bodyFrame, ResponseConsumer responseConsumer, String url) {
-        performRequest("POST", headers, bodyFrame, responseConsumer, url);
+    public ResponseFrame post(HeaderFrame headers, BodyFrame bodyFrame, ResponseConsumer responseConsumer, String url) {
+        return performRequest("POST", headers, bodyFrame, responseConsumer, url);
     }
 
-    public void put(HeaderFrame headers, BodyFrame bodyFrame, ResponseConsumer responseConsumer, String url) {
-        performRequest("PUT", headers, bodyFrame, responseConsumer, url);
+    public ResponseFrame put(HeaderFrame headers, BodyFrame bodyFrame, ResponseConsumer responseConsumer, String url) {
+        return performRequest("PUT", headers, bodyFrame, responseConsumer, url);
     }
 
-    public void delete(HeaderFrame headers, BodyFrame bodyFrame, ResponseConsumer responseConsumer, String url) {
-        performRequest("DELETE", headers, bodyFrame, responseConsumer, url);
+    public ResponseFrame delete(HeaderFrame headers, BodyFrame bodyFrame, ResponseConsumer responseConsumer, String url) {
+        return performRequest("DELETE", headers, bodyFrame, responseConsumer, url);
     }
 
-    private void performRequest(String method, HeaderFrame headers, BodyFrame bodyFrame, ResponseConsumer responseConsumer, String url) {
+    private ResponseFrame performRequest(String method, HeaderFrame headers, BodyFrame bodyFrame, ResponseConsumer responseConsumer, String url) {
         try {
             HttpClient client = HttpClient.newHttpClient();
             if (proxyConfiguration != null) {
@@ -74,14 +76,17 @@ public class JxRequest {
             HttpRequest request = requestBuilder.build();
             CompletableFuture<HttpResponse<String>> response = client.sendAsync(request, HttpResponse.BodyHandlers.ofString());
 
+            AtomicReference<ResponseFrame> responseFrame = new AtomicReference<>();
             response.thenAccept(httpResponse -> {
-                ResponseFrame responseFrame = new ResponseFrame(httpResponse.uri(), httpResponse.version(), StatusCode.fromCode(httpResponse.statusCode()), httpResponse.body(), httpResponse.headers());
-                responseConsumer.accept(responseFrame);
+                responseFrame.set(new ResponseFrame(httpResponse.uri(), httpResponse.version(), StatusCode.fromCode(httpResponse.statusCode()), httpResponse.body(), httpResponse.headers()));
+                responseConsumer.accept(responseFrame.get());
             }).join();
 
+            return responseFrame.get();
         } catch (Exception e) {
             System.err.println("HTTP request error: " + e.getMessage());
             e.printStackTrace();
         }
+        return null;
     }
 }
