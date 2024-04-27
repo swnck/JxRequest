@@ -44,19 +44,24 @@ public class JxRequest {
         performRequest("POST", headers, bodyFrame, responseConsumer, url);
     }
 
+    public void put(HeaderFrame headers, BodyFrame bodyFrame, ResponseConsumer responseConsumer, String url) {
+        performRequest("PUT", headers, bodyFrame, responseConsumer, url);
+    }
+
+    public void delete(HeaderFrame headers, BodyFrame bodyFrame, ResponseConsumer responseConsumer, String url) {
+        performRequest("DELETE", headers, bodyFrame, responseConsumer, url);
+    }
+
     private void performRequest(String method, HeaderFrame headers, BodyFrame bodyFrame, ResponseConsumer responseConsumer, String url) {
         try {
-            HttpClient client;
-            client = HttpClient.newHttpClient();
+            HttpClient client = HttpClient.newHttpClient();
             if (proxyConfiguration != null) {
-                //System.out.println("Proxy: " + proxyConfiguration.getHost() + ":" + proxyConfiguration.getPort());
-                 client = HttpClient.newBuilder().
-                        proxy(ProxySelector.of(new InetSocketAddress(proxyConfiguration.getHost(), proxyConfiguration.getPort())))
+                client = HttpClient.newBuilder()
+                        .proxy(ProxySelector.of(new InetSocketAddress(proxyConfiguration.getHost(), proxyConfiguration.getPort())))
                         .build();
             }
 
             HttpRequest.Builder requestBuilder = HttpRequest.newBuilder()
-
                     .uri(new URI(url))
                     .method(method, HttpRequest.BodyPublishers.ofString(bodyFrame.getBodyAsJson()));
 
@@ -64,19 +69,18 @@ public class JxRequest {
                 requestBuilder.header("Content-Type", ContentType.APPLICATION_JSON.getMimeType());
             }
 
-            headers.getHeaders().forEach((key, value) -> {
-                requestBuilder.header(key, value.toString());
-            });
+            headers.getHeaders().forEach(requestBuilder::header);
 
             HttpRequest request = requestBuilder.build();
             CompletableFuture<HttpResponse<String>> response = client.sendAsync(request, HttpResponse.BodyHandlers.ofString());
 
             response.thenAccept(httpResponse -> {
-                ResponseFrame responseFrame = new ResponseFrame(StatusCode.fromCode(httpResponse.statusCode()), httpResponse.body());
+                ResponseFrame responseFrame = new ResponseFrame(httpResponse.uri(), httpResponse.version(), StatusCode.fromCode(httpResponse.statusCode()), httpResponse.body(), httpResponse.headers());
                 responseConsumer.accept(responseFrame);
             }).join();
 
         } catch (Exception e) {
+            System.err.println("HTTP request error: " + e.getMessage());
             e.printStackTrace();
         }
     }
