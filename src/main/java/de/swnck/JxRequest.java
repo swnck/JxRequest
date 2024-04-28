@@ -79,7 +79,7 @@ public class JxRequest {
             AtomicReference<ResponseFrame> responseFrame = new AtomicReference<>();
             response.thenAccept(httpResponse -> {
                 responseFrame.set(new ResponseFrame(httpResponse.uri(), httpResponse.version(), StatusCode.fromCode(httpResponse.statusCode()), httpResponse.body(), httpResponse.headers()));
-                responseConsumer.accept(responseFrame.get());
+                if (responseConsumer != null) responseConsumer.accept(responseFrame.get());
             }).join();
 
             return responseFrame.get();
