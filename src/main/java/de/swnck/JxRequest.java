@@ -67,6 +67,7 @@ public class JxRequest {
                     .uri(new URI(url))
                     .method(method, HttpRequest.BodyPublishers.ofString(bodyFrame.getBodyAsJson()));
 
+            if (headers == null) headers = HeaderFrame.empty();
             if (!headers.hasHeader("Content-Type")) {
                 requestBuilder.header("Content-Type", ContentType.APPLICATION_JSON.getMimeType());
             }
