@@ -39,7 +39,7 @@ public class JxRequest {
 
 
     public ResponseFrame get(HeaderFrame headers, ResponseConsumer responseConsumer, String url) {
-        return performRequest("GET", headers, new BodyFrame(), responseConsumer, url);
+        return performRequest("GET", headers, null, responseConsumer, url);
     }
 
     public ResponseFrame post(HeaderFrame headers, BodyFrame bodyFrame, ResponseConsumer responseConsumer, String url) {
@@ -56,20 +56,19 @@ public class JxRequest {
 
     private ResponseFrame performRequest(String method, HeaderFrame headers, BodyFrame bodyFrame, ResponseConsumer responseConsumer, String url) {
         try {
-            HttpClient client = HttpClient.newHttpClient();
+            HttpClient.Builder clientBuilder = HttpClient.newBuilder();
             if (proxyConfiguration != null) {
-                client = HttpClient.newBuilder()
-                        .proxy(ProxySelector.of(new InetSocketAddress(proxyConfiguration.getHost(), proxyConfiguration.getPort())))
-                        .build();
+                clientBuilder.proxy(ProxySelector.of(new InetSocketAddress(proxyConfiguration.getHost(), proxyConfiguration.getPort())));
             }
+            HttpClient client = clientBuilder.build();
 
             HttpRequest.Builder requestBuilder = HttpRequest.newBuilder()
                     .uri(new URI(url))
-                    .method(method, HttpRequest.BodyPublishers.ofString(bodyFrame.getBodyAsJson()));
+                    .method(method, (bodyFrame == null) ? HttpRequest.BodyPublishers.noBody() : HttpRequest.BodyPublishers.ofString(bodyFrame.getBodyAsJson()));
 
             if (headers == null) headers = HeaderFrame.empty();
             if (!headers.hasHeader("Content-Type")) {
-                requestBuilder.header("Content-Type", ContentType.APPLICATION_JSON.getMimeType());
+                requestBuilder.header("Content-Type", ContentType.TEXT_PLAIN.getMimeType());
             }
 
             headers.getHeaders().forEach(requestBuilder::header);
