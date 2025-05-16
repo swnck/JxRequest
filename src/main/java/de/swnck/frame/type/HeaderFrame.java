@@ -35,8 +35,9 @@ public class HeaderFrame implements Frame {
         return new HeaderFrame(new HashMap<>());
     }
 
-    public void addHeaderEntry(String headerName, Object headerValue) {
+    public HeaderFrame add(String headerName, Object headerValue) {
         headers.put(headerName, headerValue);
+        return this;
     }
 
     public boolean hasHeader(String headerName) {

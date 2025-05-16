@@ -26,8 +26,9 @@ public class BodyFrame implements Frame {
         return new BodyFrame(new HashMap<>());
     }
 
-    public void add(String bodyName, Object bodyValue) {
+    public BodyFrame add(String bodyName, Object bodyValue) {
         body.put(bodyName, bodyValue);
+        return this;
     }
 
     public String getBodyAsJson() {
