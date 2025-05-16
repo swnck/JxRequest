@@ -1,4 +1,4 @@
-package de.swnck.util;
+package io.github.swnck.util;
 
 import lombok.Getter;
 

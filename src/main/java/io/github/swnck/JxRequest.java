@@ -1,13 +1,13 @@
-package de.swnck;
+package io.github.swnck;
 
-import de.swnck.config.ProxyConfiguration;
-import de.swnck.config.RequestConfiguration;
-import de.swnck.consumer.ResponseConsumer;
-import de.swnck.frame.type.BodyFrame;
-import de.swnck.frame.type.HeaderFrame;
-import de.swnck.frame.type.ResponseFrame;
-import de.swnck.util.ContentType;
-import de.swnck.util.StatusCode;
+import io.github.swnck.config.ProxyConfiguration;
+import io.github.swnck.config.RequestConfiguration;
+import io.github.swnck.consumer.ResponseConsumer;
+import io.github.swnck.frame.type.BodyFrame;
+import io.github.swnck.frame.type.HeaderFrame;
+import io.github.swnck.frame.type.ResponseFrame;
+import io.github.swnck.util.ContentType;
+import io.github.swnck.util.StatusCode;
 import lombok.Getter;
 
 import java.net.InetSocketAddress;

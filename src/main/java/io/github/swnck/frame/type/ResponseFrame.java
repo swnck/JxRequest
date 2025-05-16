@@ -1,16 +1,12 @@
-package de.swnck.frame.type;
+package io.github.swnck.frame.type;
 
-import de.swnck.frame.Frame;
-import de.swnck.util.StatusCode;
-import jdk.jshell.Snippet;
+import io.github.swnck.frame.Frame;
+import io.github.swnck.util.StatusCode;
 import lombok.Getter;
-import lombok.Setter;
 
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpHeaders;
-import java.util.HashMap;
-import java.util.Map;
 
 @Getter
 public class ResponseFrame implements Frame {

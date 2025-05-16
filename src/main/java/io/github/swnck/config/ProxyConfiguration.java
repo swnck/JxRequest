@@ -1,4 +1,4 @@
-package de.swnck.config;
+package io.github.swnck.config;
 
 import lombok.Builder;
 import lombok.Getter;

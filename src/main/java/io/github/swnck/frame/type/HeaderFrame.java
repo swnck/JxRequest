@@ -1,6 +1,6 @@
-package de.swnck.frame.type;
+package io.github.swnck.frame.type;
 
-import de.swnck.frame.Frame;
+import io.github.swnck.frame.Frame;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;

@@ -1,6 +1,6 @@
-package de.swnck.consumer;
+package io.github.swnck.consumer;
 
-import de.swnck.frame.type.ResponseFrame;
+import io.github.swnck.frame.type.ResponseFrame;
 
 @FunctionalInterface
 public interface ResponseConsumer {

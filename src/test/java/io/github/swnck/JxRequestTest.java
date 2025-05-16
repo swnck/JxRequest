@@ -1,9 +1,8 @@
-package de.swnck;
+package io.github.swnck;
 
-import de.swnck.config.RequestConfiguration;
-import de.swnck.frame.type.BodyFrame;
-import de.swnck.frame.type.HeaderFrame;
-import de.swnck.frame.type.ResponseFrame;
+import io.github.swnck.frame.type.BodyFrame;
+import io.github.swnck.frame.type.HeaderFrame;
+import io.github.swnck.frame.type.ResponseFrame;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
