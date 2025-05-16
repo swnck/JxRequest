@@ -37,6 +37,7 @@ public class JxRequest {
         this.proxyConfiguration = proxyConfiguration;
     }
 
+    public JxRequest() {}
 
     public ResponseFrame get(HeaderFrame headers, ResponseConsumer responseConsumer, String url) {
         return performRequest("GET", headers, null, responseConsumer, url);
@@ -84,8 +85,7 @@ public class JxRequest {
 
             return responseFrame.get();
         } catch (Exception e) {
-            System.err.println("HTTP request error: " + e.getMessage());
-            e.printStackTrace();
+            e.printStackTrace(System.out);
         }
         return null;
     }

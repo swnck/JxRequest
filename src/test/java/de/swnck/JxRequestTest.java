@@ -11,24 +11,22 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 public class JxRequestTest {
     @Test
     void getRequest() {
-        JxRequest jxRequest = new JxRequest(
-                RequestConfiguration.builder().build()
-        );
+        JxRequest jxRequest = new JxRequest();
 
         jxRequest.get(HeaderFrame.empty(), (ResponseFrame responseFrame) -> {
+            System.out.println(responseFrame.getContent());
             assertNotNull(responseFrame.getContent());
         }, "https://google.com");
     }
 
     @Test
     void postRequest() {
-        JxRequest jxRequest = new JxRequest(
-                RequestConfiguration.builder().build()
-        );
+        JxRequest jxRequest = new JxRequest();
 
         jxRequest.post(HeaderFrame.empty(), BodyFrame.empty(),
                 (ResponseFrame responseFrame) -> {
-            //assertNotNull(responseFrame.getContent()); Todo: impl. Http-Proxy
+                    System.out.println(responseFrame.getContent());
+            assertNotNull(responseFrame.getContent()); //Todo: impl. Http-Proxy
         }, "https://google.com");
     }
 }

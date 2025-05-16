@@ -14,21 +14,19 @@ import java.util.Map;
 @Builder
 public class BodyFrame implements Frame {
 
-    private Map<String, Object> body;
-
-    public BodyFrame() {
-        body = new HashMap<>();
-    }
+    private Map<String, Object> body = new HashMap<>();
 
     public BodyFrame(Map<String, Object> body) {
         this.body = body;
     }
 
+    public BodyFrame() {}
+
     public static BodyFrame empty() {
         return new BodyFrame(new HashMap<>());
     }
 
-    public void addBodyEntry(String bodyName, Object bodyValue) {
+    public void add(String bodyName, Object bodyValue) {
         body.put(bodyName, bodyValue);
     }
 
