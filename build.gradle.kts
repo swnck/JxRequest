@@ -1,11 +1,11 @@
 plugins {
     id("java-library")
     id("maven-publish")
-    id("signing")
+
 }
 
 group = "io.github.swnck"
-version = "1.0.6"
+version = "1.0.0"
 
 repositories {
     mavenCentral()
@@ -26,38 +26,19 @@ tasks.test {
 
 publishing {
     publications {
-        create<MavenPublication>("mavenJava") {
+        register<MavenPublication>("gpr") {
             from(components["java"])
-            pom {
-                name.set("JxRequest")
-                description.set("Effortlessly streamline Http requests in Java, bypassing the complexities of standard HTTP interactions.")
-                url.set("https://github.com/swnck/JxRequest")
-                licenses {
-                    license {
-                        name.set("The Apache License, Version 2.0")
-                        url.set("http://www.apache.org/licenses/LICENSE-2.0.txt")
-                    }
-                }
-                developers {
-                    developer {
-                        id.set("swnck")
-                        name.set("Nick Schweizer")
-                        email.set("datapack3t.contact@gmail.com")
-                    }
-                }
-                scm {
-                    connection.set("scm:git:git://github.com/swnck/JxRequest.git")
-                    developerConnection.set("scm:git:ssh://github.com:swnck/JxRequest.git")
-                    url.set("https://github.com/swnck/JxRequest")
-                }
-            }
         }
     }
 
     repositories {
         maven {
-            name = "OSSRH"
-            
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/swnck/JxRequest")
+            credentials {
+                username = "swnck"
+                password = System.getenv("GITHUB_TOKEN")
+            }
         }
     }
 }
