@@ -46,7 +46,7 @@ To use JxRequest in your project, add the following dependency to your `pom.xml`
 <dependency>
     <groupId>io.github.swnck</groupId>
     <artifactId>jxrequest</artifactId>
-    <version>2.0.0</version>
+    <version>1.0.0</version>
 </dependency>
 ```
 
@@ -54,7 +54,7 @@ If you're using Gradle, add the following to your `build.gradle`:
 
 ```groovy
 dependencies {
-    implementation 'io.github.swnck:jxrequest:2.0.0'
+    implementation 'io.github.swnck:jxrequest:1.0.0'
 }
 ```
 If you're using a different build tool, you can download the JAR file from the [releases page](https://github.com/swnck/JxRequest/releases) and add it to your classpath manually.
