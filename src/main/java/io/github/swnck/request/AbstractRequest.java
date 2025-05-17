@@ -24,7 +24,8 @@ public abstract class AbstractRequest<T extends AbstractRequest<T>> {
 
     public AbstractRequest(String url, Method method) {
         this.method = method;
-        this.url = url;
+
+        this.setUrl(url);
     }
 
     public AbstractRequest(Method method) {
