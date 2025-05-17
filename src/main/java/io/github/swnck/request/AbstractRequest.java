@@ -48,6 +48,18 @@ public abstract class AbstractRequest<T extends AbstractRequest<T>> {
     }
 
     @SuppressWarnings("unchecked")
+    public T setContentType(ContentType contentType) {
+        if (contentType == null) {
+            throw new IllegalArgumentException("Content-Type cannot be null");
+        }
+
+        this.contentType = contentType;
+        headers.put("Content-Type", contentType.getMimeType());
+
+        return (T) this;
+    }
+
+    @SuppressWarnings("unchecked")
     public T setHeader(String key, String value) {
         if (key == null || value == null) {
             throw new IllegalArgumentException("Header key and value cannot be null");
