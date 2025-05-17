@@ -1,31 +1,28 @@
 package io.github.swnck;
 
-import io.github.swnck.frame.type.BodyFrame;
-import io.github.swnck.frame.type.HeaderFrame;
-import io.github.swnck.frame.type.ResponseFrame;
+import io.github.swnck.request.GetRequest;
+import io.github.swnck.request.PostRequest;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class JxRequestTest {
     @Test
-    void getRequest() {
-        JxRequest jxRequest = new JxRequest();
+    void get() {
+        GetRequest jxRequest = JxRequest.get()
+                .setUrl("google.com");
 
-        jxRequest.get(HeaderFrame.empty(), (ResponseFrame responseFrame) -> {
-            System.out.println(responseFrame.getContent());
-            assertNotNull(responseFrame.getContent());
-        }, "https://google.com");
+        JxResponse response = jxRequest.send();
+        assertNotNull(response);
     }
 
     @Test
-    void postRequest() {
-        JxRequest jxRequest = new JxRequest();
+    void post() {
+        PostRequest jxRequest = JxRequest.post()
+                .setUrl("http://localhost:8080/users/test")
+                .setBody("{\"name\": \"test\"}");
 
-        jxRequest.post(HeaderFrame.empty(), BodyFrame.empty(),
-                (ResponseFrame responseFrame) -> {
-                    System.out.println(responseFrame.getContent());
-            assertNotNull(responseFrame.getContent()); //Todo: impl. Http-Proxy
-        }, "https://google.com");
+        JxResponse response = jxRequest.send();
+        assertNotNull(response);
     }
 }
