@@ -9,11 +9,9 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 public class JxRequestTest {
     @Test
     void get() {
-        GetRequest jxRequest = JxRequest.get()
-                .setUrl("google.com");
+        GetRequest jxRequest = JxRequest.get("google.com");
 
         JxResponse response = jxRequest.send();
-        System.out.println(response.toString());
         assertNotNull(response);
     }
 
