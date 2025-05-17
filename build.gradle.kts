@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "io.github.swnck"
-version = "1.0.0"
+version = "1.0.2"
 
 repositories {
     mavenCentral()
@@ -18,6 +18,12 @@ dependencies {
     implementation("com.google.code.gson:gson:2.13.1")
     compileOnly("org.projectlombok:lombok:1.18.30")
     annotationProcessor("org.projectlombok:lombok:1.18.30")
+}
+
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(21))
+    }
 }
 
 tasks.test {

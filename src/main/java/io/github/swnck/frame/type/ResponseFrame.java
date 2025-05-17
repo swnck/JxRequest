@@ -1,5 +1,6 @@
 package io.github.swnck.frame.type;
 
+import com.google.gson.Gson;
 import io.github.swnck.frame.Frame;
 import io.github.swnck.util.StatusCode;
 import lombok.Getter;
@@ -30,5 +31,15 @@ public class ResponseFrame implements Frame {
 
     public StatusCode getStatusCodeEnum() {
         return statusCode;
+    }
+
+    public String getJsonString() {
+        Gson gson = new Gson();
+        return gson.toJson(this.content);
+    }
+
+    public Gson getJsonObject() {
+        Gson gson = new Gson();
+        return gson.fromJson(this.content, Gson.class);
     }
 }
