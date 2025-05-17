@@ -21,4 +21,13 @@ public enum ContentType {
     ContentType(String mimeType) {
         this.mimeType = mimeType;
     }
+
+    public static ContentType fromString(String mimeType) {
+        for (ContentType contentType : ContentType.values()) {
+            if (contentType.mimeType.equalsIgnoreCase(mimeType)) {
+                return contentType;
+            }
+        }
+        throw new IllegalArgumentException("Unsupported Content-Type: " + mimeType);
+    }
 }
