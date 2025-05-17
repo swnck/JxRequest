@@ -13,6 +13,7 @@ public class JxRequestTest {
                 .setUrl("google.com");
 
         JxResponse response = jxRequest.send();
+        System.out.println(response.toString());
         assertNotNull(response);
     }
 

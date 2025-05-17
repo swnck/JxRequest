@@ -113,6 +113,10 @@ public abstract class AbstractRequest<T extends AbstractRequest<T>> {
             throw new IllegalArgumentException("URL cannot be null");
         }
 
+        if (!url.startsWith("http://") && !url.startsWith("https://")) {
+            url = "http://" + url;
+        }
+
         this.url = url;
         return (T) this;
     }
