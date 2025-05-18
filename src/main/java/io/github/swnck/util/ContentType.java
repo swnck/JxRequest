@@ -30,4 +30,8 @@ public enum ContentType {
         }
         throw new IllegalArgumentException("Unsupported Content-Type: " + mimeType);
     }
+
+    public static String toString(ContentType contentType) {
+        return contentType.mimeType;
+    }
 }

@@ -14,10 +14,11 @@ import java.net.URLEncoder;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.net.http.HttpTimeoutException;
 import java.nio.charset.StandardCharsets;
+import java.time.Duration;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
 @Getter
@@ -25,7 +26,6 @@ import java.util.concurrent.CompletableFuture;
 public class JxResponse {
     private static final HttpClient CLIENT = HttpClient.newBuilder().build();
     private static final Logger LOGGER = LoggerFactory.getLogger(JxResponse.class);
-
 
     private String body;
     private String contentType;
@@ -37,7 +37,7 @@ public class JxResponse {
     private Map<String, List<String>> headers;
 
     public JxResponse(AbstractRequest<?> request) {
-        String urlWithParams = buildUrlWithParams(request.url, request.getQueryParams());
+        String urlWithParams = buildUrlWithParams(request.getUrl(), request.getQueryParams());
         String bodyContent = (request instanceof PostRequest) ? ((PostRequest) request).getBody() : null;
 
         HttpRequest.Builder requestBuilder;
@@ -45,6 +45,7 @@ public class JxResponse {
         try {
             requestBuilder = HttpRequest.newBuilder()
                     .uri(new URI(urlWithParams))
+                    .timeout(Duration.ofMillis(request.getTimeoutMillis()))
                     .method(request.getMethod().toString(),
                             (bodyContent == null) ? HttpRequest.BodyPublishers.noBody() : HttpRequest.BodyPublishers.ofString(bodyContent));
         } catch (Exception e) {
@@ -53,7 +54,6 @@ public class JxResponse {
         }
 
         request.getHeaders().forEach((key, value) -> requestBuilder.header(key, value.toString()));
-        requestBuilder.header("Content-Type", Objects.requireNonNullElse(request.contentType, ContentType.TEXT_PLAIN).getMimeType());
 
         HttpRequest httpRequest = requestBuilder.build();
 
@@ -63,7 +63,8 @@ public class JxResponse {
 
         response.thenAccept(httpResponse -> {
             this.body = httpResponse.body();
-            this.contentType = httpResponse.headers().firstValue("Content-Type").orElse(ContentType.TEXT_PLAIN.getMimeType());
+            this.contentType = httpResponse.headers().firstValue("Content-Type")
+                    .orElse(ContentType.TEXT_PLAIN.getMimeType());
             this.statusCode = httpResponse.statusCode();
             this.uri = httpResponse.uri().toString();
             this.headers = httpResponse.headers().map();
