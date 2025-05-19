@@ -2,6 +2,12 @@ package io.github.swnck.util;
 
 import lombok.Getter;
 
+/**
+ * Enum representing standard HTTP status codes.
+ * Each constant corresponds to a specific HTTP response status with its associated numeric code.
+ * It includes status codes across different categories such as informational, success,
+ * redirection, client error, and server error.
+ */
 @Getter
 public enum StatusCode {
     CONTINUE(100),

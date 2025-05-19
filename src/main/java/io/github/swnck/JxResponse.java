@@ -1,7 +1,7 @@
 package io.github.swnck;
 
+import io.github.swnck.request.AbstractBody;
 import io.github.swnck.request.AbstractRequest;
-import io.github.swnck.request.PostRequest;
 import io.github.swnck.util.ContentType;
 import io.github.swnck.util.StatusCode;
 import lombok.Getter;
@@ -14,13 +14,17 @@ import java.net.URLEncoder;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.net.http.HttpTimeoutException;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
+/**
+ * Represents an HTTP response retrieved using an asynchronous HTTP client.
+ * This class is designed to process a given request, initiate the corresponding HTTP call,
+ * and handle the response data, including body, status code, headers, and timing.
+ */
 @Getter
 @Setter
 public class JxResponse {
@@ -36,9 +40,17 @@ public class JxResponse {
 
     private Map<String, List<String>> headers;
 
+    /**
+     * Constructs a JxResponse object by initiating and handling an asynchronous HTTP request based on the provided request object.
+     * Handles the composition of the request URI with query parameters, method type, headers, and optional body content.
+     * Completes the operation by storing the response details such as body, status code, headers, and execution duration.
+     *
+     * @param request the {@link AbstractRequest} object containing the details of the HTTP request,
+     *                including the URL, query parameters, headers, method, timeout, and body (if applicable).
+     */
     public JxResponse(AbstractRequest<?> request) {
         String urlWithParams = buildUrlWithParams(request.getUrl(), request.getQueryParams());
-        String bodyContent = (request instanceof PostRequest) ? ((PostRequest) request).getBody() : null;
+        String bodyContent = (request instanceof AbstractBody<?>) ? ((AbstractBody<?>) request).getBody() : null;
 
         HttpRequest.Builder requestBuilder;
 
@@ -77,6 +89,15 @@ public class JxResponse {
         }).join();
     }
 
+    /**
+     * Constructs a complete URL by appending query parameters to the base URL.
+     * If the provided query parameters are null or empty, the original URL is returned as is.
+     * Handles encoding of both keys and values in the query parameters to ensure proper URL formatting.
+     *
+     * @param url the base URL to which query parameters will be appended
+     * @param queryParams a map containing query parameter keys and their corresponding values
+     * @return the complete URL with query parameters appended and properly encoded
+     */
     private String buildUrlWithParams(String url, Map<String, Object> queryParams) {
         if (queryParams == null || queryParams.isEmpty()) return url;
         StringBuilder sb = new StringBuilder(url);

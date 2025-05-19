@@ -2,6 +2,12 @@ package io.github.swnck.util;
 
 import lombok.Getter;
 
+/**
+ * Enum representing various predefined user-agent strings for simulating
+ * different browsers in web requests. It provides commonly used browser
+ * user-agent strings to assist in web scraping, testing, or any environment
+ * requiring browser simulation.
+ */
 @Getter
 public enum SimulationAgent {
     CHROME("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36"),

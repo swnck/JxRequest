@@ -22,18 +22,18 @@
 ---
 
 ## Features
-- [ ] Support for
+- [x] Support for
   - [x] GET requests
   - [x] POST requests
-  - [ ] PUT requests
-  - [ ] DELETE requests
-  - [ ] PATCH requests
+  - [x] PUT requests
+  - [x] DELETE requests
+  - [x] PATCH requests
 - [ ] Proxy configuration
 - [ ] Class (entity) mapping
 - [ ] Support for body (form-urlencoded, multipart, binary)
 - [ ] Retry request many times
 - [x] Query parameters 
-- [ ] Timeout configuration
+- [X] Timeout configuration
 - [x] CORS support
 
 ---
