@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "io.github.swnck"
-version = "1.0.3"
+version = "1.0.4"
 
 repositories {
     mavenCentral()
@@ -16,6 +16,8 @@ dependencies {
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.10.0")
 
     implementation("org.slf4j:slf4j-api:2.0.17")
+
+    implementation("org.json:json:20250517")
 
     compileOnly("org.projectlombok:lombok:1.18.38")
     annotationProcessor("org.projectlombok:lombok:1.18.38")
