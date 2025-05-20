@@ -57,6 +57,7 @@ public class JxResponse {
         try {
             requestBuilder = HttpRequest.newBuilder()
                     .uri(new URI(urlWithParams))
+                    .version(request.getVersion())
                     .timeout(Duration.ofMillis(request.getTimeoutMillis()))
                     .method(request.getMethod().toString(),
                             (bodyContent == null) ? HttpRequest.BodyPublishers.noBody() : HttpRequest.BodyPublishers.ofString(bodyContent));

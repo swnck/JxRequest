@@ -8,6 +8,7 @@ import io.github.swnck.util.SimulationAgent;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.net.http.HttpClient;
 import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
@@ -23,102 +24,19 @@ import java.util.Map;
 @Getter
 @Setter
 public abstract class AbstractRequest<T extends AbstractRequest<T>>{
-
-    /**
-     * A collection of key-value pairs representing the HTTP headers for the request.
-     * <p>
-     * Each key in the map corresponds to a header name, and its associated value
-     * represents the header value. These headers are used to define additional
-     * metadata or configuration for the outgoing HTTP request.
-     * <p>
-     * This map is initialized as an empty {@code HashMap} and can be modified
-     * using associated methods such as {@code setHeader} or {@code setHeaders}.
-     * <p>
-     * The map is marked as {@code final}, ensuring that it cannot be reassigned
-     * after being initialized, while still allowing modification of its contents.
-     */
     private final Map<String, Object> headers = new HashMap<>();
 
-    /**
-     * Represents a collection of query parameters to be included in an HTTP request.
-     * <p>
-     * This map stores key-value pairs where the key is the name of the query parameter
-     * and the value is the parameter's value. It is used to construct the query string
-     * included in the request's URL. Adding, modifying, or removing parameters in this
-     * map directly affects the query parameters of the associated request.
-     * <p>
-     * Query parameters can be set or updated using methods such as {@code setQueryParam(String, String)}
-     * or {@code setQueryParams(Map<String, Object>)}.
-     * <p>
-     * The map is initialized as an empty {@code HashMap} and will contain no parameters by default.
-     * <p>
-     * This field is immutable, and its reference cannot be reassigned.
-     */
     private final Map<String, Object> queryParams = new HashMap<>();
 
-    /**
-     * Represents the HTTP method used for the current request.
-     * This field stores the specific HTTP method type, such as GET, POST,
-     * DELETE, PUT, or PATCH, to dictate how the request interacts with
-     * the target resource.
-     * <p>
-     * The {@code method} is initialized during the construction of the
-     * {@code AbstractRequest} or its subclasses, and it governs the
-     * behavior of the HTTP operation performed by the request.
-     * <p>
-     * Supported HTTP methods:
-     * - GET: Retrieve data from the server.
-     * - POST: Send data to the server for creation.
-     * - DELETE: Remove a resource on the server.
-     * - PUT: Create or overwrite a resource on the server.
-     * - PATCH: Make partial modifications to a resource on the server.
-     *
-     * @see Method
-     */
     private Method method;
 
-    /**
-     * Represents the Cross-Origin Resource Sharing (CORS) configuration for the request.
-     * This variable holds an instance of the {@code Cors} class, which defines the CORS
-     * headers to be included with the HTTP request.
-     * <p>
-     * The {@code Cors} class provides methods for specifying allowed origins, HTTP methods,
-     * headers, and credential settings for configuring cross-origin requests.
-     * <p>
-     * If set, the CORS headers defined in this variable are applied to the request,
-     * enabling the appropriate handling of cross-origin policies.
-     * <p>
-     * Default value is {@code null} when no CORS configuration is set.
-     */
     private Cors cors = null;
 
-    /**
-     * The URL to which the HTTP request will be sent.
-     * This field is expected to hold the target endpoint of the request,
-     * including the protocol (e.g., "http://" or "https://") and, optionally,
-     * any path or query components.
-     * <p>
-     * The value of this field must be initialized either through a constructor
-     * or using the `setUrl` method, ensuring the string starts with a valid
-     * protocol. If not explicitly provided, "http://" is prefixed by default.
-     * <p>
-     * This field is critical for configuring the desired endpoint for the request
-     * execution and is used in conjunction with other request elements
-     * such as headers, query parameters, and HTTP methods.
-     */
     private String url;
 
-    /**
-     * The timeout duration in milliseconds for the execution of the request.
-     * This value specifies the maximum amount of time the request is allowed to run
-     * before being forcibly terminated or marked as timed out.
-     * <p>
-     * A default value of 100000 milliseconds (100 seconds) is assigned, signifying the request
-     * will wait up to 100 seconds unless a different timeout is set using the
-     * appropriate configuration method. Adjusting this value allows tuning
-     * the request's timeout based on specific use cases or requirements.
-     */
     private int timeoutMillis = 100000;
+
+    private HttpClient.Version version = HttpClient.Version.HTTP_1_1;
 
     /**
      * Constructs a new instance of {@code AbstractRequest} with the specified URL and HTTP method.
@@ -377,6 +295,27 @@ public abstract class AbstractRequest<T extends AbstractRequest<T>>{
             throw new IllegalArgumentException("Timeout must be >= 0");
         }
         this.timeoutMillis = timeoutMillis;
+        return (T) this;
+    }
+
+
+    /**
+     * Sets the HTTP protocol version for the current request.
+     *
+     * This method allows the user to specify the desired {@link HttpClient.Version}
+     * to be used for the request. The specified version is stored and updated
+     * within the request instance.
+     *
+     * @param version the HTTP protocol version to set; must not be null.
+     * @return the updated instance of the request, allowing for method chaining.
+     * @throws IllegalArgumentException if the provided version is null.
+     */
+    @SuppressWarnings("unchecked")
+    public T setVersion(HttpClient.Version version) {
+        if (version == null) {
+            throw new IllegalArgumentException("Version cannot be null");
+        }
+        this.version = version;
         return (T) this;
     }
 
